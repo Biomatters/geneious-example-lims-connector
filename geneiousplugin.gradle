@@ -1,0 +1,86 @@
+defaultTasks 'createPlugin'
+
+apply plugin: "java"
+
+// IntelliJ IDEA specific configuration required to workaround a bug. See https://intellij-support.jetbrains.com/hc/en-us/community/posts/206842955-builrd-resources-broken-for-gradle-projects-
+apply plugin: "idea"
+idea {
+    module {
+        inheritOutputDirs = true
+    }
+}
+
+repositories {
+    ivy {
+        url "http://assets.geneious.com/developer/geneious/ivy"
+        patternLayout {
+            artifact "[organisation]/[module]/[type]s/[artifact]-[revision].[ext]"
+            ivy "[organisation]/[module]/ivys/ivy-[revision].xml"
+        }
+    }
+    mavenCentral()
+}
+
+dependencies {
+    compile group: "com.biomatters", name: "geneious.publicapi", version: "2019.0.4", configuration: "api"
+//    compile group: "org.glassfish.jersey.media", name: "jersey-media-json-jackson", version: "2.27"
+//    compile group: "org.glassfish.jersey.core", name: "jersey-client", version: "2.27"
+//    compile group: "org.glassfish.jersey.inject", name: "jersey-hk2", version: "2.27"
+
+    testCompile "junit:junit:4.+"
+    testRuntime group: "com.biomatters", name: "geneious.publicapi", version: "2019.0.4", configuration: "runtime"
+}
+
+compileJava {
+    sourceCompatibility "1.8"
+    targetCompatibility "1.8"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'resources'
+        }
+    }
+
+    test {
+        java {
+            srcDir 'test'
+        }
+        resources {
+            srcDir 'testdata'
+        }
+    }
+}
+
+task createPlugin(dependsOn: build, type: Zip) {
+    description "Creates the gplugin to install into Geneious"
+
+    from {
+        configurations.compile.filter {
+            !it.getName().startsWith("GeneiousPublicAPI-") && !it.getName().startsWith("jdom-") && !it.getName().startsWith("jebl-")
+        }
+    }
+    from(libsDir)
+    from(sourceSets.main.resources)
+    into pluginName
+
+    archiveName "$shortName" + getPluginVersion() + ".gplugin"
+}
+
+String getPluginVersion() {
+    def p = ~/.*\s+PLUGIN_VERSION\s+=\s+"(\d+(\.\d+)*)".*/
+    def versionString
+    def pluginSourceFile = file("$projectDir/src/" + pluginName.replace(".", "/") + ".java")
+    pluginSourceFile.eachLine { line ->
+        def m = p.matcher(line)
+        if (m.find()) {
+            versionString = "_" + m[0][1].replaceAll("\\.", "_")
+        }
+    }
+
+    versionString
+}
