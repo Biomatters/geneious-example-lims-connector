@@ -4,11 +4,22 @@ import com.biomatters.geneious.publicapi.plugin.DocumentOperation;
 import com.biomatters.geneious.publicapi.plugin.GeneiousPlugin;
 import com.biomatters.geneious.publicapi.plugin.GeneiousService;
 
+import java.io.File;
+
 @SuppressWarnings("unused")
 public class LimsConnectorPlugin extends GeneiousPlugin {
 
     static final String LIMS_NAME = "Example LIMS";
     private static final String PLUGIN_VERSION = "0.0.1";
+
+    private InMemoryLimsAdapter limsAdapter;
+
+    /**
+     * @return a string for use in programmatic identifiers
+     */
+    static String getLimsCode() {
+        return LIMS_NAME.replace(" ", "");
+    }
 
     @Override
     public String getName() {
@@ -51,16 +62,21 @@ public class LimsConnectorPlugin extends GeneiousPlugin {
     }
 
     @Override
+    public void initialize(File pluginUserDirectory, File pluginDirectory) {
+        limsAdapter = new InMemoryLimsAdapter();
+    }
+
+    @Override
     public GeneiousService[] getServices() {
         return new GeneiousService[]{
-                new LimsDatabaseService()
+                new LimsDatabaseService(limsAdapter)
         };
     }
 
     @Override
     public DocumentOperation[] getDocumentOperations() {
         return new DocumentOperation[]{
-                new LimsSubmissionOperation()
+                new LimsSubmissionOperation(limsAdapter)
         };
     }
 }

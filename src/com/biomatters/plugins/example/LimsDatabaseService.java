@@ -7,19 +7,24 @@ import com.biomatters.geneious.publicapi.utilities.StandardIcons;
 
 public class LimsDatabaseService extends DatabaseService {
 
-    @Override
+    private final LimsAdapter limsAdapter;
+
+    LimsDatabaseService(LimsAdapter limsAdapter) {
+        this.limsAdapter = limsAdapter;
+    }
+
     public QueryField[] getSearchFields() {
-        return new QueryField[0];
+        return limsAdapter.getSearchFields();
     }
 
     @Override
-    public void retrieve(Query query, RetrieveCallback retrieveCallback, URN[] urns) throws DatabaseServiceException {
-
+    public void retrieve(Query query, RetrieveCallback retrieveCallback, URN[] urnsToNotRetrieve) throws DatabaseServiceException {
+        limsAdapter.retrieve(query, retrieveCallback);
     }
 
     @Override
     public String getUniqueID() {
-        return LimsConnectorPlugin.LIMS_NAME.replace(" ", "");
+        return LimsConnectorPlugin.getLimsCode();
     }
 
     @Override
@@ -41,10 +46,4 @@ public class LimsDatabaseService extends DatabaseService {
     public Icons getIcons() {
         return StandardIcons.database.getIcons();
     }
-
-//    todo
-//    @Override
-//    public boolean isBrowsable() {
-//        return true;
-//    }
 }
