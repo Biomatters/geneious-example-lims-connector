@@ -10,7 +10,7 @@ import java.io.File;
 public class LimsConnectorPlugin extends GeneiousPlugin {
 
     static final String LIMS_NAME = "Example LIMS"; //todo
-    private static final String PLUGIN_VERSION = "0.0.1"; //todo
+    private static final String PLUGIN_VERSION = "0.0.2"; //todo
 
     private LimsAdapter limsAdapter;
 
