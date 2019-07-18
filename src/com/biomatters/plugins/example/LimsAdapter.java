@@ -17,7 +17,8 @@ public interface LimsAdapter {
 
     /**
      * @param sequence sequence residues to search in LIMS for
-     * @return list of all IDs of matching sequence in LIMS if there are any (never null)
+     * @return list of all IDs of matching sequence in LIMS if there are any (never null). Return empty list if LIMS doesn't
+     * support searching like this.
      */
     List<String> searchForSequences(SequenceCharSequence sequence) throws DocumentOperationException;
 
