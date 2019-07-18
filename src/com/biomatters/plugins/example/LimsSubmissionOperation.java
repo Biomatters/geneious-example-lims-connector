@@ -45,10 +45,13 @@ public class LimsSubmissionOperation extends DocumentOperation {
         previously been submitted or there's a sequence in the LIMS with exactly the same residues.
         */
         List<AnnotatedPluginDocument> sequencesAlreadyInLims = new ArrayList<>();
+        List<AnnotatedPluginDocument> sequencesWithIdsAlready = new ArrayList<>();
         for (AnnotatedPluginDocument annotatedDocument : annotatedDocuments) {
             NucleotideSequenceDocument sequence = (NucleotideSequenceDocument) annotatedDocument.getDocument();
             Optional<String> idOnDocument = LimsAdapter.getIdFromDocumentNotes(annotatedDocument);
-            if (!idOnDocument.isPresent()) { // optimization: don't bother searching since we know it's been submitted
+            if (idOnDocument.isPresent()) {
+                sequencesWithIdsAlready.add(annotatedDocument);
+            } else {
                 List<String> searchResults = limsAdapter.searchForSequences(sequence.getCharSequence());
                 if (!searchResults.isEmpty()) {
                     sequencesAlreadyInLims.add(annotatedDocument);
@@ -58,9 +61,17 @@ public class LimsSubmissionOperation extends DocumentOperation {
 
         //warn about duplicate sequences
         if (!sequencesAlreadyInLims.isEmpty()) {
-            if (!Dialogs.showContinueCancelDialog("<html><b>Some sequences already exist in " + LIMS_NAME + ".</b><br><br>" +
-                            "Submitting may result in duplication of data.</html>",
-                    "Sequences Already in " + LIMS_NAME, null, Dialogs.DialogIcon.INFORMATION)) {
+            if (!Dialogs.showContinueCancelDialog("<html><b>Sequences have been found in " + LIMS_NAME + " that have residues matching these sequences.</b><br><br>" +
+                            "New entries will be submitted which may result in duplication of data.</html>",
+                    "Matching Sequences Found in " + LIMS_NAME, null, Dialogs.DialogIcon.INFORMATION)) {
+                throw new DocumentOperationException.Canceled();
+            }
+        }
+
+        if (!sequencesWithIdsAlready.isEmpty()) {
+            if (!Dialogs.showContinueCancelDialog("<html><b>Some selected sequences already have an ID from " + LIMS_NAME + ".</b><br><br>" +
+                            "Submitting will overwrite existing entries in " + LIMS_NAME + ".</html>",
+                    "Sequences Already Submitted", null, Dialogs.DialogIcon.WARNING)) {
                 throw new DocumentOperationException.Canceled();
             }
         }
