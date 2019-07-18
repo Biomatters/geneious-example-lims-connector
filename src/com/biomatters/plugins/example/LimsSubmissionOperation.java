@@ -62,7 +62,6 @@ public class LimsSubmissionOperation extends DocumentOperation {
                             "Submitting may result in duplication of data.</html>",
                     "Sequences Already in " + LIMS_NAME, null, Dialogs.DialogIcon.INFORMATION)) {
                 throw new DocumentOperationException.Canceled();
-                //todo tell them which ones
             }
         }
 

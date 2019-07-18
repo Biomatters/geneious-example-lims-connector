@@ -9,10 +9,10 @@ import java.io.File;
 @SuppressWarnings("unused")
 public class LimsConnectorPlugin extends GeneiousPlugin {
 
-    static final String LIMS_NAME = "Example LIMS";
-    private static final String PLUGIN_VERSION = "0.0.1";
+    static final String LIMS_NAME = "Example LIMS"; //todo
+    private static final String PLUGIN_VERSION = "0.0.1"; //todo
 
-    private InMemoryLimsAdapter limsAdapter;
+    private LimsAdapter limsAdapter;
 
     /**
      * @return a string for use in programmatic identifiers
@@ -63,7 +63,7 @@ public class LimsConnectorPlugin extends GeneiousPlugin {
 
     @Override
     public void initialize(File pluginUserDirectory, File pluginDirectory) {
-        limsAdapter = new InMemoryLimsAdapter();
+        limsAdapter = new InMemoryLimsAdapter(); //todo implement LimsAdapter for your system and return it here. Be sure to read the javadoc on LimsAdapter methods carefully to make sure you fulfill their contracts
     }
 
     @Override

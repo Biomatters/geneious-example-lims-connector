@@ -24,7 +24,7 @@ public interface LimsAdapter {
     /**
      * Submit sequences to the LIMS. New entries are created for any documents that don't have an ID stored in
      * DocumentNotes. LIMS will overwrite existing entries with the new sequence if an ID is present in DocumentNotes.
-     * This method will add/update DocumentNotes on the sequence and save it with the LIMS ID.
+     * This method will add/update DocumentNotes on the input sequences and save them locally with the LIMS ID.
      *
      * @param documents NucleotideSequenceDocuments to submit
      * @return id of the
@@ -33,6 +33,8 @@ public interface LimsAdapter {
 
     /**
      * Delegation of {{@link com.biomatters.geneious.publicapi.databaseservice.DatabaseService#retrieve(Query, RetrieveCallback, URN[])}}
+     *
+     * Sequence will be returned with LIMS IDs in DocumentNotes.
      */
     void retrieve(Query query, RetrieveCallback retrieveCallback);
 
