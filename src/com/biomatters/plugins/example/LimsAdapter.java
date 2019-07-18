@@ -72,6 +72,6 @@ public interface LimsAdapter {
 
         AnnotatedPluginDocument.DocumentNotes documentNotes = annotatedDocument.getDocumentNotes(true);
         documentNotes.setNote(documentNote);
-        documentNotes.saveNotes();
+        documentNotes.saveNotes(false);
     }
 }
