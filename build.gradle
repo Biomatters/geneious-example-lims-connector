@@ -1,6 +1,6 @@
 ext {
     shortName = "LimsConnectorPlugin"
-    pluginName = "com.biomatters.plugins.example." + shortName;
+    pluginName = "com.biomatters.plugins.example." + shortName
 }
 
 apply from: 'geneiousplugin.gradle'
