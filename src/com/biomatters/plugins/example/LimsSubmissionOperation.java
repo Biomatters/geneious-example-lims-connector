@@ -4,6 +4,7 @@ import com.biomatters.geneious.publicapi.components.Dialogs;
 import com.biomatters.geneious.publicapi.documents.AnnotatedPluginDocument;
 import com.biomatters.geneious.publicapi.documents.sequence.NucleotideSequenceDocument;
 import com.biomatters.geneious.publicapi.plugin.*;
+import com.biomatters.geneious.publicapi.utilities.StandardIcons;
 import jebl.util.ProgressListener;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class LimsSubmissionOperation extends DocumentOperation {
 
     @Override
     public GeneiousActionOptions getActionOptions() {
-        return new GeneiousActionOptions("Submit to " + LIMS_NAME).setInMainToolbar(true);
+        return new GeneiousActionOptions("Submit to " + LIMS_NAME, null, StandardIcons.database.getIcons()).setInMainToolbar(true);
     }
 
     @Override
