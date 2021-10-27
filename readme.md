@@ -1,5 +1,5 @@
 # Example LIMS Connector Plugin
-An example plugin for connecting Geneious Prime to a LIMS system (or similar) such that sequences can be submitted and retrieved. As
+An example plugin for connecting Geneious Prime to a LIMS, ELN or registry system such that sequences can be submitted and retrieved. As
 a demonstration, this just stores sequences in memory meaning the "LIMS" is wiped when Geneious is shutdown.
 
 The plugin adds a "Submit" button to the toolbar for submitting sequences to a LIMS as well as a database service for
